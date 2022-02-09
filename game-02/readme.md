@@ -40,3 +40,10 @@ for you).
 
 Just for clarification, an item can never have its Quality increase above 50, however "Sulfuras" is a
 legendary item and as such its Quality is 80 and it never alters.
+
+# Solution
+- The gilded-rose.ts file has been refactored, especially the updateQuality function of the GildedRose class, where we use a switch, which helps us to classify each of the items.
+- The item "Conjured" was added, with its respective rules.
+- In the file gilded-rose.ts at the end there are some commented examples for testing.
+- The file gilded-rose.js has been generated, using the command tsc gilded-rose.ts
+- Inside the app folder, the index.html file has been created, where the call to the Js file (gilded-rose.js) is made.
