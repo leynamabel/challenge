@@ -10,56 +10,71 @@ class Item {
     }
 }
 
+// Declare some constants
+const sulfurasQuality: number = 80; //Sulfuras is a legendary item and as such its Quality is 80
+const maxValueQuality: number = 50;
+const minValueQuality: number = 0;
+
 class GildedRose {
     items: Array<Item>;
 
     constructor(items = [] as Array<Item>) {
         this.items = items;
-    }
 
+    }
+    increaseQuality(i: number) {
+        return (this.items[i].quality < maxValueQuality)
+            ? (this.items[i].quality + 1) : this.items[i].quality;
+    }
+    decreaseQuality(i: number, unitsDecrease: number = 1) {
+        return (this.items[i].quality > minValueQuality)
+            ? (this.items[i].quality - unitsDecrease) : this.items[i].quality;
+    }
+    decreaseSellIn(i: number, unitsDecrease: number = 1) {
+        return this.items[i].sellIn - unitsDecrease;
+    }
     updateQuality() {
         for (let i = 0; i < this.items.length; i++) {
             switch (this.items[i].name) {
                 case 'Aged Brie': {
                     // Aged Brie: Actually increases in Quality the older it gets
-                    this.items[i].quality = (this.items[i].quality < 50) ? (this.items[i].quality + 1) : this.items[i].quality;
-                    this.items[i].sellIn = this.items[i].sellIn - 1;
+                    this.items[i].quality = this.increaseQuality(i);
+                    this.items[i].sellIn = this.decreaseSellIn(i);
                     break;
                 }
                 case 'Sulfuras, Hand of Ragnaros': {
                     // Sulfuras: Being a legendary item, never has to be sold or decreases in Quality, 
-                    // It is a legendary item and as such its Quality is 80
-                    this.items[i].quality = 80;
+                    this.items[i].quality = sulfurasQuality;
                     break;
                 }
                 case 'Backstage passes to a TAFKAL80ETC concert': {
                     // Backstage: Like aged brie, increases in Quality as its SellIn value approaches.
-                    this.items[i].quality = (this.items[i].quality < 50) ? (this.items[i].quality + 1) : this.items[i].quality;
+                    this.items[i].quality = this.increaseQuality(i);
                     if (this.items[i].sellIn < 11) {
                         // Quality increases by 2 when there are 10 days
-                        this.items[i].quality = (this.items[i].quality < 50) ? (this.items[i].quality + 1) : this.items[i].quality;
+                        this.items[i].quality = this.increaseQuality(i);
                     }
                     if (this.items[i].sellIn < 6) {
                         // Quality increases by 3 when there are 5 days 
-                        this.items[i].quality = (this.items[i].quality < 50) ? (this.items[i].quality + 1) : this.items[i].quality;
+                        this.items[i].quality = this.increaseQuality(i);
                     }
                     if (this.items[i].sellIn <= 0) {
                         // Quality drops to 0 after the concert
                         this.items[i].quality = 0;
                     }
-                    this.items[i].sellIn = this.items[i].sellIn - 1;
+                    this.items[i].sellIn = this.decreaseSellIn(i);
                     break;
                 }
                 case 'Conjured': {
                     // Conjured: Items degrade in Quality twice as fast as normal items
-                    this.items[i].quality = (this.items[i].quality > 0) ? (this.items[i].quality - 2) : this.items[i].quality;
-                    this.items[i].sellIn = this.items[i].sellIn - 2;
+                    this.items[i].quality = this.decreaseQuality(i, 2);
+                    this.items[i].sellIn = this.decreaseSellIn(i, 2);
                     break;
                 }
                 default: {
                     // Default: Normal items
-                    this.items[i].quality = (this.items[i].quality > 0) ? (this.items[i].quality - 1) : this.items[i].quality;
-                    this.items[i].sellIn = this.items[i].sellIn - 1;
+                    this.items[i].quality = this.decreaseQuality(i);
+                    this.items[i].sellIn = this.decreaseSellIn(i);
                     break;
                 }
             }
