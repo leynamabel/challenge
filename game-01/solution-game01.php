@@ -1,33 +1,20 @@
 <?php
 
-$index = 0;
-
 function getArrayFirstPossibleSolution(array $arrayM, int $intergerN)
 {
     try {
-        global $index;
         if (empty($arrayM)) {
             throw new Exception("The array M is empty.");
         }
-        $count = count($arrayM);
-        $pivot = $arrayM[$index];
-        $result = [];
-        for ($i = $index + 1; $i < $count; $i++) {
-            $total = $pivot + $arrayM[$i];
-            if ($total == $intergerN) {
-                $result = [$pivot, $arrayM[$i]];
-                return $result;
+        $arrayMAux = $arrayM;
+        for ($i = 0; $i < count($arrayM); $i++) {
+            $numberToSum = $intergerN - $arrayM[$i];
+            unset($arrayMAux[$i]);
+            if (in_array($numberToSum, $arrayMAux)) {
+                return [$arrayM[$i], $numberToSum];
             }
         }
-        $index++;
-        if ($index < $count) {
-            return getArrayFirstPossibleSolution($arrayM, $intergerN);
-        }
-        if (empty($result)) {
-            throw new Exception(
-                "There are no numbers in the array whose sum equals to $intergerN"
-            );
-        }
+        return "There are no numbers in the array whose sum equals to $intergerN.";
     } catch (Exception $e) {
         echo $e->getMessage();
     }
